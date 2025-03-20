@@ -19,16 +19,22 @@ type Role struct {
 
 type Transaction struct {
     gorm.Model
-    UserID      uint    `json:"user_id" gorm:"not null"`
-    Type        string  `json:"type" gorm:"not null"` // "income" or "expense"
     Amount      float64 `json:"amount" gorm:"not null"`
-    Description string  `json:"description"`
-    Category    string  `json:"category"`
-    Date        string  `json:"date"` // Format: YYYY-MM-DD
+    Description string  `json:"description" gorm:"not null"`
+    Date        string  `json:"date" gorm:"not null"`
+    CategoryID  uint    `json:"category_id" gorm:"not null"`
+    Category    Category `json:"category" gorm:"foreignKey:CategoryID"`
+}
+
+type Category struct {
+    gorm.Model
+    Name         string       `json:"name" gorm:"unique;not null"`
+    Transactions []Transaction `json:"transactions" gorm:"foreignKey:CategoryID"`
 }
 
 func MigrateUsers(db *gorm.DB) {
     db.AutoMigrate(&User{})
 	db.AutoMigrate(&Role{})
 	db.AutoMigrate(&Transaction{})
+    db.AutoMigrate(&Category{})
 }
