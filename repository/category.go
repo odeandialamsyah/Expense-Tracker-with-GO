@@ -21,3 +21,15 @@ func (cr *CategoryRepository) GetCategoryByID(id uint) (*models.Category, error)
 	}
 	return &category, nil
 }
+
+func (cr *CategoryRepository) CreateCategory(category *models.Category) error {
+	return cr.db.Create(category).Error
+}
+
+func (cr *CategoryRepository) UpdateCategory(category *models.Category) error {
+	return cr.db.Save(category).Error
+}
+
+func (cr *CategoryRepository) DeleteCategory(id uint) error {
+	return cr.db.Delete(&models.Category{}, id).Error
+}
