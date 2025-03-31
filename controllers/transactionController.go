@@ -4,6 +4,7 @@ import (
 	"expense-tracker-with-go/models"
 	"expense-tracker-with-go/repository"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,4 +43,36 @@ func (tc *TransactionController) CreateTransaction(c *gin.Context) {
         return
     }
 	c.JSON(http.StatusCreated, gin.H{"message": "Transaction created successfully", "data": transaction})
+}
+
+func (tc *TransactionController) UpdateTransaction(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil{
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID transaction"})
+		return
+	}
+
+	transaction, err := tc.TransactionRepo.GetTransactionByID(uint(id))
+    if err != nil {
+        ctx.JSON(404, gin.H{"error": "Transaction not found!"})
+        return
+    }
+
+	if err := ctx.ShouldBindJSON(transaction); err != nil {
+        ctx.JSON(400, gin.H{"error": err.Error()})
+        return
+    }
+
+    _, err = tc.CategoryRepo.GetCategoryByID(transaction.CategoryID)
+    if err != nil {
+        ctx.JSON(400, gin.H{"error": "Invalid category ID"})
+        return
+    }
+
+    if err := tc.TransactionRepo.UpdateTransaction(transaction); err != nil {
+        ctx.JSON(500, gin.H{"error": "Failed to update transaction"})
+        return
+    }
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Transaction updated successfully", "data": transaction})
 }
