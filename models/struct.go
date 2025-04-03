@@ -32,7 +32,7 @@ type Category struct {
     Transactions []Transaction `json:"transactions" gorm:"foreignKey:CategoryID"`
 }
 
-func MigrateUsers(db *gorm.DB) {
+func Migrate(db *gorm.DB) {
     db.AutoMigrate(&User{})
 	db.AutoMigrate(&Role{})
 	db.AutoMigrate(&Transaction{})

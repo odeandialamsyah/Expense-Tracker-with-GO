@@ -1,9 +1,11 @@
 package utils
 
 import (
+	"bytes"
 	"expense-tracker-with-go/models"
 	"fmt"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -24,4 +26,14 @@ func SeedCategories(db *gorm.DB) {
 			fmt.Println("Category already exists:", existingCategory.Name)
 		}
 	}
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(bytes), err 
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil 
 }
