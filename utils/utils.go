@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"bytes"
 	"expense-tracker-with-go/models"
 	"fmt"
 
