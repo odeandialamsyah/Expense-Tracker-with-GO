@@ -1,10 +1,11 @@
 package middleware
 
 import (
-    "expense-tracker/utils"
-    "github.com/gin-gonic/gin"
-    "net/http"
-    "strings"
+	"expense-tracker-with-go/utils"
+	"net/http"
+	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
