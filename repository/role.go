@@ -6,15 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type roleRepository struct {
+type RoleRepository struct {
 	DB *gorm.DB
 }
 
-func NewRoleRepository(db *gorm.DB) roleRepository {
-	return roleRepository{DB: db}
+func NewRoleRepository(db *gorm.DB) *RoleRepository {
+	return &RoleRepository{DB: db}
 }
 
-func (rr *roleRepository) GetRoleByName(name string) (*models.Role, error) {
+func (rr *RoleRepository) GetRoleByName(name string) (*models.Role, error) {
 	var role models.Role
 	if err := rr.DB.Where("name = ?", name).First(&role).Error; err != nil {
 		return nil, err

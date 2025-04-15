@@ -6,19 +6,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type userRepository struct {
+type UserRepository struct {
 	DB *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB) userRepository {
-	return userRepository{DB: db}
+func NewUserRepository(db *gorm.DB) *UserRepository {
+	return &UserRepository{DB: db}
 }
 
-func (ur *userRepository) CreateUser(user *models.User) error {
+func (ur *UserRepository) CreateUser(user *models.User) error {
 	return ur.DB.Create(user).Error
 }
 
-func (ur *userRepository) GetUserByEmail(email string) (*models.User, error) {
+func (ur *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
 	if err := ur.DB.Preload("Role").Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
