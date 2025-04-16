@@ -24,14 +24,14 @@ func AuthMiddleware() gin.HandlerFunc {
             return
         }
 
-        claims, err := utils.ValidateJWT(tokenString)
+        claims, err := utils.VerifyJWT(tokenString)
         if err != nil {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
             c.Abort()
             return
         }
 
-        c.Set("user_id", claims.UserID)
+        c.Set("user_id", claims)
         c.Next()
     }
 }
