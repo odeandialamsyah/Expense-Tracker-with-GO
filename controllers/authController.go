@@ -79,3 +79,26 @@ func (ac *AuthController) Login(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"token": token})
 }
+
+func (c *UserController) UpdateUser(ctx *gin.Context) {
+	id_user, err := strconv.Atoi(ctx.Param("id_user"))
+	if err != nil{
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var user models.User
+	if err := ctx.ShouldBindJSON(&user); err != nil{
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user.IDUser = uint(id_user)
+
+	if err := c.UserRepo.UpdateUser(&user); err != nil{
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
+}
