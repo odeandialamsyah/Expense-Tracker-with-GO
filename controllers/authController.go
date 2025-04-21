@@ -102,3 +102,18 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, user)
 }
+
+func (c *UserController) DeleteUser(ctx *gin.Context){
+	id_user, err := strconv.Atoi(ctx.Param("id_user"))
+	if err != nil{
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	if err := c.UserRepo.DeleteUser(uint(id_user)); err != nil{
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "User deletes successfully"})
+}
