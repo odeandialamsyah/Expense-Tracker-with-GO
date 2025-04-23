@@ -28,3 +28,22 @@ func TransactionRoutes(router *gin.Engine, db *gorm.DB) {
 		transactionGroup.DELETE("/:id", tc.DeleteTransaction)
 	}
 }
+
+func AuthRoutes(router *gin.Engine, db *gorm.DB) {
+	// Initialize repositories
+	userRepo := repository.NewUserRepository(db)
+	roleRepo := repository.NewRoleRepository(db)
+
+	// Initialize controller with repositories
+	ac := controllers.AuthController {
+		UserRepo: *userRepo,
+		RoleRepo: *roleRepo,
+	}
+
+	// Define routes
+	authGroup := router.Group("/auth")
+	{
+		authGroup.POST("/register", ac.Register)
+		authGroup.POST("/login", ac.Login)
+	}
+}
