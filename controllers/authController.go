@@ -5,6 +5,7 @@ import (
 	"expense-tracker-with-go/repository"
 	"expense-tracker-with-go/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -80,7 +81,7 @@ func (ac *AuthController) Login(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
-func (c *UserController) UpdateUser(ctx *gin.Context) {
+func (c *AuthController) UpdateUser(ctx *gin.Context) {
 	id_user, err := strconv.Atoi(ctx.Param("id_user"))
 	if err != nil{
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})

@@ -18,7 +18,7 @@ func (ur *UserRepository) CreateUser(user *models.User) error {
 	return ur.DB.Create(user).Error
 }
 
-func (ur *UserRepository) UpdateUser(transaction *models.User) error {
+func (ur *UserRepository) UpdateUser(user *models.User) error {
 	return ur.DB.Save(user).Error
 }
 
